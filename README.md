@@ -17,8 +17,8 @@
 
     <style>
         /* ============================================
-               RESET & BASE
-               ============================================ */
+           RESET & BASE (unchanged)
+           ============================================ */
         * {
             margin: 0;
             padding: 0;
@@ -48,8 +48,8 @@
         }
 
         /* ============================================
-               DISNEY+ HOTSTAR HEADER
-               ============================================ */
+           NAVBAR (unchanged)
+           ============================================ */
         .navbar {
             position: fixed;
             top: 0;
@@ -124,8 +124,8 @@
         }
 
         /* ============================================
-               DISNEY+ HOTSTAR HERO
-               ============================================ */
+           HERO (unchanged)
+           ============================================ */
         .hero {
             position: relative;
             min-height: 85vh;
@@ -256,8 +256,8 @@
         }
 
         /* ============================================
-               DROPDOWN + CHART SECTION
-               ============================================ */
+           DASHBOARD (unchanged)
+           ============================================ */
         .dashboard-section {
             padding: 48px 0 72px;
             background: #0a0e14;
@@ -323,8 +323,8 @@
         }
 
         /* ============================================
-               CHARTS GRID (Disney+ Cards)
-               ============================================ */
+           CHARTS GRID (unchanged)
+           ============================================ */
         .charts-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -378,8 +378,8 @@
         }
 
         /* ============================================
-               DOWNLOAD SECTION (Disney+ Style)
-               ============================================ */
+           DOWNLOAD SECTION (unchanged)
+           ============================================ */
         .download-section {
             padding: 72px 0;
             background: #0f141c;
@@ -455,8 +455,8 @@
         }
 
         /* ============================================
-               FOOTER (Disney+ Style)
-               ============================================ */
+           FOOTER (unchanged)
+           ============================================ */
         .footer {
             background: #06090d;
             padding: 40px 0;
@@ -485,8 +485,8 @@
         }
 
         /* ============================================
-               RESPONSIVE
-               ============================================ */
+           RESPONSIVE (unchanged)
+           ============================================ */
         @media (max-width: 1024px) {
             .charts-grid {
                 grid-template-columns: 1fr;
@@ -553,7 +553,7 @@
 <body>
 
     <!-- ============================================
-         NAVBAR (Disney+ Hotstar)
+         NAVBAR (unchanged)
          ============================================ -->
     <nav class="navbar">
         <div class="container">
@@ -571,7 +571,7 @@
     </nav>
 
     <!-- ============================================
-         HERO (Disney+ Hotstar)
+         HERO (unchanged)
          ============================================ -->
     <section class="hero">
         <div class="hero-content">
@@ -583,6 +583,7 @@
                 Interactive dashboard analyzing 24 years of macroeconomic data across
                 <strong>9 countries</strong> (G7 + India &amp; China) with original research
                 on education spending and poverty reduction.
+                <br /><span style="color:#f5c518;">🔮 Now with 5‑year forecasts!</span>
             </p>
             <div class="hero-stats">
                 <div class="stat"><div class="number">9</div><div class="label">Countries</div></div>
@@ -595,7 +596,7 @@
     </section>
 
     <!-- ============================================
-         DASHBOARD (Disney+ Hotstar)
+         DASHBOARD (unchanged)
          ============================================ -->
     <section class="dashboard-section" id="dashboard">
         <div class="container">
@@ -626,14 +627,13 @@
     </section>
 
     <!-- ============================================
-         DOWNLOADS (Disney+ Hotstar)
+         DOWNLOADS (unchanged)
          ============================================ -->
     <section class="download-section" id="downloads">
         <div class="container">
             <h2>📂 <span>Download</span> Files</h2>
             <p class="sub">Access the complete project — research, charts, presentation &amp; code</p>
             <div class="download-grid">
-                <!-- All download buttons use .download-btn class + data-type -->
                 <div class="download-card">
                     <div class="icon">📄</div>
                     <h4>Research Paper</h4>
@@ -675,7 +675,7 @@
     </section>
 
     <!-- ============================================
-         FOOTER (Disney+ Hotstar)
+         FOOTER (unchanged)
          ============================================ -->
     <footer class="footer">
         <div class="container">
@@ -690,17 +690,19 @@
     </footer>
 
     <!-- ============================================
-         JAVASCRIPT - CHART ENGINE + DOWNLOAD HANDLERS
+         JAVASCRIPT - CHART ENGINE + FORECAST + DOWNLOADS
          ============================================ -->
     <script>
         // ============================================================
-        // 1. DATA GENERATION
+        // 1. DATA GENERATION (historical 2000–2023)
         // ============================================================
-        const years = Array.from({ length: 24 }, (_, i) => 2000 + i);
+        const histYears = Array.from({ length: 24 }, (_, i) => 2000 + i);
+        const forecastYears = Array.from({ length: 5 }, (_, i) => 2024 + i);
+        const allYears = [...histYears, ...forecastYears];
 
         function generateSeries(base, growth, cycleAmp, cycleLen, noiseAmp) {
             const series = [];
-            for (let i = 0; i < years.length; i++) {
+            for (let i = 0; i < histYears.length; i++) {
                 const trend = base + (growth * (i - 11) / 8);
                 let cycle = 0;
                 if (cycleLen !== 0) {
@@ -790,7 +792,46 @@
         };
 
         // ============================================================
-        // 2. CHART RENDERING ENGINE
+        // 2. FORECAST ENGINE (Linear Regression on historical data)
+        // ============================================================
+        function linearRegression(x, y) {
+            // x: array of numbers (indices), y: array of numbers
+            const n = x.length;
+            let sumX = 0,
+                sumY = 0,
+                sumXY = 0,
+                sumX2 = 0;
+            for (let i = 0; i < n; i++) {
+                sumX += x[i];
+                sumY += y[i];
+                sumXY += x[i] * y[i];
+                sumX2 += x[i] * x[i];
+            }
+            const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            const intercept = (sumY - slope * sumX) / n;
+            return { slope, intercept };
+        }
+
+        function forecastSeries(histData, numForecast) {
+            const n = histData.length;
+            const x = Array.from({ length: n }, (_, i) => i);
+            const y = histData;
+            const { slope, intercept } = linearRegression(x, y);
+            const forecast = [];
+            for (let i = 0; i < numForecast; i++) {
+                const newX = n + i;
+                let val = slope * newX + intercept;
+                // clamp to reasonable bounds (optional)
+                const minVal = Math.min(...y) - 0.5;
+                const maxVal = Math.max(...y) + 0.5;
+                val = Math.min(maxVal, Math.max(minVal, val));
+                forecast.push(Math.round(val * 100) / 100);
+            }
+            return forecast;
+        }
+
+        // ============================================================
+        // 3. CHART RENDERING with FORECAST
         // ============================================================
         function renderCharts(selectedCountry) {
             const grid = document.getElementById('chartsGrid');
@@ -812,14 +853,29 @@
                 card.appendChild(container);
                 grid.appendChild(card);
 
-                const trace = {
-                    x: years,
-                    y: data[selectedCountry][indicator],
+                // Historical data
+                const histVals = data[selectedCountry][indicator];
+                const forecastVals = forecastSeries(histVals, 5);
+
+                // Build traces
+                const traceHist = {
+                    x: histYears,
+                    y: histVals,
                     mode: 'lines+markers',
                     type: 'scatter',
-                    name: selectedCountry,
+                    name: 'Historical',
                     line: { color: colorMap[selectedCountry] || '#f5c518', width: 3 },
                     marker: { size: 6, color: colorMap[selectedCountry] || '#f5c518' }
+                };
+
+                const traceForecast = {
+                    x: forecastYears,
+                    y: forecastVals,
+                    mode: 'lines+markers',
+                    type: 'scatter',
+                    name: 'Forecast',
+                    line: { color: colorMap[selectedCountry] || '#f5c518', width: 3, dash: 'dot' },
+                    marker: { size: 8, color: colorMap[selectedCountry] || '#f5c518', symbol: 'diamond' }
                 };
 
                 const layout = {
@@ -830,7 +886,8 @@
                     xaxis: {
                         gridcolor: 'rgba(255,255,255,0.05)',
                         tickfont: { color: '#8892a0' },
-                        title: { text: 'Year', font: { color: '#8892a0' } }
+                        title: { text: 'Year', font: { color: '#8892a0' } },
+                        range: [1998, 2030] // show some padding
                     },
                     yaxis: {
                         gridcolor: 'rgba(255,255,255,0.05)',
@@ -838,10 +895,11 @@
                         title: { text: 'Value', font: { color: '#8892a0' } }
                     },
                     hovermode: 'x unified',
-                    showlegend: false
+                    showlegend: true,
+                    legend: { font: { color: '#e8edf3' }, bgcolor: 'rgba(0,0,0,0.5)' }
                 };
 
-                Plotly.newPlot(container.id, [trace], layout, { responsive: true });
+                Plotly.newPlot(container.id, [traceHist, traceForecast], layout, { responsive: true });
             }
         }
 
@@ -851,7 +909,7 @@
         renderCharts('India');
 
         // ============================================================
-        // 3. SMOOTH SCROLL
+        // 4. SMOOTH SCROLL (unchanged)
         // ============================================================
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
@@ -864,10 +922,9 @@
         });
 
         // ============================================================
-        // 4. DOWNLOAD HANDLERS — generates files on the fly
+        // 5. DOWNLOAD HANDLERS (unchanged – still generate files on the fly)
         // ============================================================
 
-        // ---------- helper: download a Blob ----------
         function downloadBlob(blob, filename) {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -879,14 +936,13 @@
             setTimeout(() => URL.revokeObjectURL(url), 5000);
         }
 
-        // ---------- helper: canvas to PNG ----------
         function canvasToBlob(canvas) {
             return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
         }
 
-        // ---------- generate research paper (TXT) ----------
         function generateResearchPaper() {
-            const content = `============================================================
+            const content =
+                `============================================================
         SARANSH'S ECONOMIC INTELLIGENCE PLATFORM
         RESEARCH PAPER: EDUCATION SPENDING & POVERTY REDUCTION
         ============================================================
@@ -948,18 +1004,15 @@
             return new Blob([content], { type: 'text/plain;charset=utf-8' });
         }
 
-        // ---------- generate scatter plot (PNG via canvas) ----------
         function generateScatterPlot() {
             const canvas = document.createElement('canvas');
             canvas.width = 1920;
             canvas.height = 1080;
             const ctx = canvas.getContext('2d');
 
-            // dark background
             ctx.fillStyle = '#0a0e14';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // title
             ctx.fillStyle = '#f5c518';
             ctx.font = 'bold 56px Inter, sans-serif';
             ctx.textAlign = 'center';
@@ -969,7 +1022,6 @@
             ctx.font = '32px Inter, sans-serif';
             ctx.fillText('Scatter Plot · 9 Countries · 2000–2023', canvas.width / 2, 160);
 
-            // fake scatter data: education % vs poverty reduction %
             const points = [
                 [2.0, 1.5],
                 [2.5, 1.2],
@@ -993,7 +1045,6 @@
 
             function yScale(v) { return margin.top + plotH - ((v - yMin) / (yMax - yMin)) * plotH; }
 
-            // axes
             ctx.strokeStyle = '#1e2733';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -1002,7 +1053,6 @@
             ctx.lineTo(margin.left + plotW, margin.top + plotH);
             ctx.stroke();
 
-            // axis labels
             ctx.fillStyle = '#8892a0';
             ctx.font = '28px Inter, sans-serif';
             ctx.textAlign = 'center';
@@ -1013,7 +1063,6 @@
             ctx.fillText('Poverty Reduction (%)', 0, 0);
             ctx.restore();
 
-            // ticks
             ctx.fillStyle = '#5a6474';
             ctx.font = '24px Inter, sans-serif';
             ctx.textAlign = 'center';
@@ -1035,7 +1084,6 @@
                 ctx.stroke();
             }
 
-            // scatter points
             for (const [x, y] of points) {
                 const px = xScale(x);
                 const py = yScale(y);
@@ -1055,7 +1103,6 @@
                 ctx.stroke();
             }
 
-            // trend line
             ctx.strokeStyle = '#ff8c00';
             ctx.lineWidth = 4;
             ctx.setLineDash([12, 8]);
@@ -1069,9 +1116,6 @@
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // legend
-            ctx.fillStyle = '#1a212b';
-            ctx.roundRect ? ctx.roundRect(canvas.width - 320, 180, 280, 90, 12) : null;
             ctx.fillStyle = '#1a212b';
             ctx.fillRect(canvas.width - 320, 180, 280, 90);
             ctx.strokeStyle = '#1e2733';
@@ -1087,7 +1131,6 @@
             return canvas;
         }
 
-        // ---------- generate poverty trends (PNG via canvas) ----------
         function generatePovertyTrends() {
             const canvas = document.createElement('canvas');
             canvas.width = 1920;
@@ -1117,7 +1160,6 @@
 
             function yScale(v) { return margin.top + plotH - ((v - yMin) / (yMax - yMin)) * plotH; }
 
-            // grid
             ctx.strokeStyle = 'rgba(255,255,255,0.05)';
             ctx.lineWidth = 1;
             for (let y = 2; y <= 16; y += 2) {
@@ -1135,7 +1177,6 @@
                 ctx.stroke();
             }
 
-            // axes
             ctx.strokeStyle = '#1e2733';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -1154,7 +1195,6 @@
             ctx.fillText('Poverty Headcount (%)', 0, 0);
             ctx.restore();
 
-            // ticks
             ctx.fillStyle = '#5a6474';
             ctx.font = '24px Inter, sans-serif';
             ctx.textAlign = 'center';
@@ -1168,7 +1208,6 @@
                 ctx.fillText(y, margin.left - 20, py + 8);
             }
 
-            // series: India, China, US, Germany (simulated)
             const series = {
                 'India': [15, 14.5, 14, 13.5, 13, 12.5, 12, 11.5, 11, 10.5, 10, 9.5, 9, 8.5, 8, 7.5, 7, 6.5, 6, 5.5, 5,
                     4.5, 4, 3.5
@@ -1196,7 +1235,6 @@
                     else ctx.lineTo(px, py);
                 }
                 ctx.stroke();
-                // markers
                 for (let i = 0; i < vals.length; i += 3) {
                     const px = xScale(2000 + i);
                     const py = yScale(vals[i]);
@@ -1207,7 +1245,6 @@
                 }
             }
 
-            // legend
             let lx = 160,
                 ly = 220;
             for (const [name, color] of Object.entries(colors)) {
@@ -1223,7 +1260,6 @@
             return canvas;
         }
 
-        // ---------- generate heatmap (PNG via canvas) ----------
         function generateHeatmap() {
             const canvas = document.createElement('canvas');
             canvas.width = 1920;
@@ -1251,7 +1287,6 @@
             const startX = (canvas.width - totalSize) / 2;
             const startY = (canvas.height - totalSize) / 2 + 40;
 
-            // fake correlation matrix (-1 to +1)
             const matrix = [];
             for (let i = 0; i < n; i++) {
                 const row = [];
@@ -1275,13 +1310,11 @@
                 matrix.push(row);
             }
 
-            // draw cells
             for (let i = 0; i < n; i++) {
                 for (let j = 0; j < n; j++) {
                     const x = startX + j * (cellSize + gap);
                     const y = startY + i * (cellSize + gap);
                     const val = matrix[i][j];
-                    // color: blue (neg) -> dark -> yellow (pos)
                     const r = val > 0 ? Math.round(50 + 205 * val) : Math.round(50 + 50 * Math.abs(val));
                     const g = val > 0 ? Math.round(50 + 150 * val) : Math.round(50 + 50 * Math.abs(val));
                     const b = val > 0 ? Math.round(50 + 50 * val) : Math.round(50 + 205 * Math.abs(val));
@@ -1290,7 +1323,6 @@
                     ctx.strokeStyle = '#0a0e14';
                     ctx.lineWidth = 1;
                     ctx.strokeRect(x, y, cellSize, cellSize);
-                    // value
                     ctx.fillStyle = Math.abs(val) > 0.5 ? '#fff' : '#e8edf3';
                     ctx.font = 'bold 28px Inter, sans-serif';
                     ctx.textAlign = 'center';
@@ -1299,7 +1331,6 @@
                 }
             }
 
-            // row labels
             ctx.textAlign = 'right';
             ctx.textBaseline = 'middle';
             ctx.fillStyle = '#8892a0';
@@ -1309,7 +1340,6 @@
                 const y = startY + i * (cellSize + gap) + cellSize / 2;
                 ctx.fillText(short[i], x, y);
             }
-            // column labels
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
             for (let j = 0; j < n; j++) {
@@ -1318,7 +1348,6 @@
                 ctx.fillText(short[j], x, y);
             }
 
-            // color legend
             const legX = startX + totalSize + 60;
             const legY = startY + 40;
             const legH = totalSize - 80;
@@ -1343,14 +1372,12 @@
             return canvas;
         }
 
-        // ---------- generate presentation (PPTX via PptxGenJS) ----------
         function generatePresentation() {
             return new Promise((resolve) => {
                 const pptx = new PptxGenJS();
                 pptx.defineLayout({ name: 'WIDE', width: 13.33, height: 7.5 });
                 pptx.layout = 'WIDE';
 
-                // Slide 1: Title
                 const s1 = pptx.addSlide();
                 s1.background = { color: '0A0E14' };
                 s1.addText('Saransh\'s Economic Intelligence', { x: 0, y: 1.2, w: 13.33, h: 1.2, align: 'center',
@@ -1360,7 +1387,6 @@
                 s1.addText('MIT Maker Portfolio 2026', { x: 0, y: 4.5, w: 13.33, h: 0.8, align: 'center', color: '8892A0',
                     fontSize: 24, fontFace: 'Arial' });
 
-                // Slide 2: Overview
                 const s2 = pptx.addSlide();
                 s2.background = { color: '0A0E14' };
                 s2.addText('Research Overview', { x: 0.5, y: 0.5, w: 12.33, h: 1, color: 'F5C518', fontSize: 40,
@@ -1368,7 +1394,6 @@
                 s2.addText('• 9 countries (G7 + India & China)\n• 24 years of data (2000–2023)\n• 7 macroeconomic indicators\n• Focus: education spending vs poverty reduction',
                     { x: 0.5, y: 1.8, w: 12.33, h: 3.5, color: 'E8EDF3', fontSize: 28, fontFace: 'Arial', lineSpacing: 28 });
 
-                // Slide 3: Key Finding
                 const s3 = pptx.addSlide();
                 s3.background = { color: '0A0E14' };
                 s3.addText('Key Finding', { x: 0.5, y: 0.5, w: 12.33, h: 1, color: 'F5C518', fontSize: 40, fontFace: 'Arial',
@@ -1378,7 +1403,6 @@
                 s3.addText('Strongest effect observed in India and China.',
                     { x: 0.5, y: 4.0, w: 12.33, h: 1, color: 'B0B8C8', fontSize: 26, fontFace: 'Arial', align: 'center' });
 
-                // Slide 4: Policy
                 const s4 = pptx.addSlide();
                 s4.background = { color: '0A0E14' };
                 s4.addText('Policy Recommendations', { x: 0.5, y: 0.5, w: 12.33, h: 1, color: 'F5C518', fontSize: 40,
@@ -1386,7 +1410,6 @@
                 s4.addText('1. Prioritize education spending up to 5–6% of GDP\n2. Target primary & secondary education\n3. Pair with job-creation programs\n4. Monitor outcomes with data dashboards',
                     { x: 0.5, y: 1.8, w: 12.33, h: 4, color: 'E8EDF3', fontSize: 28, fontFace: 'Arial', lineSpacing: 28 });
 
-                // Slide 5: Conclusion
                 const s5 = pptx.addSlide();
                 s5.background = { color: '0A0E14' };
                 s5.addText('Conclusion', { x: 0.5, y: 0.5, w: 12.33, h: 1, color: 'F5C518', fontSize: 40, fontFace: 'Arial',
@@ -1399,7 +1422,6 @@
             });
         }
 
-        // ---------- generate source code (Jupyter Notebook JSON) ----------
         function generateSourceCode() {
             const notebook = {
                 "cells": [{
@@ -1500,7 +1522,7 @@
             return new Blob([JSON.stringify(notebook, null, 2)], { type: 'application/json' });
         }
 
-        // ---------- wire up download buttons ----------
+        // wire up download buttons
         document.querySelectorAll('.download-btn').forEach(btn => {
             btn.addEventListener('click', async function(e) {
                 e.preventDefault();
@@ -1551,10 +1573,7 @@
             });
         });
 
-        // also handle any anchor-based downloads (backward compatibility)
-        // but we already use buttons, so this is just a safety net.
-        console.log('✅ Saransh Economic Intelligence Platform loaded.');
-        console.log('📥 All downloads now generate files on the fly.');
+        console.log('✅ Saransh Economic Intelligence Platform loaded with 5‑year forecasts.');
     </script>
 
 </body>
