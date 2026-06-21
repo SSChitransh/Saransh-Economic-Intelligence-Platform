@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🧠 AI Economic Intelligence Platform v2</title>
+    <title>🧠 Economic Intelligence Platform</title>
 
     <!-- Plotly CDN -->
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js">
@@ -84,17 +84,6 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        .navbar .logo .ai-badge {
-            font-size: 0.6rem;
-            background: #00d4ff22;
-            color: #00d4ff;
-            border: 1px solid #00d4ff44;
-            padding: 2px 12px;
-            border-radius: 50px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
         .navbar .nav-links {
             display: flex;
             align-items: center;
@@ -124,7 +113,7 @@
         }
 
         /* ============================================
-           HERO (upgraded)
+           HERO
            ============================================ */
         .hero {
             position: relative;
@@ -266,7 +255,7 @@
         }
 
         /* ============================================
-           DASHBOARD SECTION (enhanced)
+           DASHBOARD SECTION
            ============================================ */
         .dashboard-section {
             padding: 30px 0 60px;
@@ -416,7 +405,7 @@
         }
 
         /* ============================================
-           PREDICTION PANEL (new)
+           PREDICTION PANEL
            ============================================ */
         .prediction-section {
             padding: 40px 0 60px;
@@ -483,7 +472,7 @@
         }
 
         /* ============================================
-           POLICY SIMULATION (new)
+           POLICY SIMULATION
            ============================================ */
         .policy-section {
             padding: 40px 0 60px;
@@ -575,7 +564,7 @@
         }
 
         /* ============================================
-           RESEARCH PAPER (new)
+           RESEARCH PAPER
            ============================================ */
         .research-section {
             padding: 40px 0 60px;
@@ -627,7 +616,7 @@
         }
 
         /* ============================================
-           DOWNLOAD SECTION (enhanced)
+           DOWNLOAD SECTION
            ============================================ */
         .download-section {
             padding: 60px 0;
@@ -802,8 +791,7 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">
-                <span>🧠</span> Saransh<span>Econ</span>
-                <span class="ai-badge">AI v2</span>
+                <span>🧠</span> Saransh's <span>EIP</span>
                 <span class="badge">MIT Research</span>
             </div>
             <div class="nav-links">
@@ -824,7 +812,7 @@
         <div class="hero-content">
             <div class="hero-badge">🧠 AI-Powered Economic Research</div>
             <h1>
-                Economic <br /><span class="highlight">Intelligence</span> Platform <span style="background:linear-gradient(135deg,#00d4ff,#f5c518);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">v2</span>
+                Economic <br /><span class="highlight">Intelligence</span> Platform
             </h1>
             <p>
                 Multi‑model AI forecasting • Policy simulation • 9 countries • 24 years of data<br />
@@ -1043,7 +1031,7 @@
          ============================================ -->
     <footer class="footer">
         <div class="container">
-            <p>Built by <strong>Saransh</strong> &bull; MIT Maker Portfolio 2026 &bull; <span style="color:#f5c518;">AI v2</span></p>
+            <p>Built by <strong>Saransh</strong> &bull; MIT Maker Portfolio 2026 &bull; <span style="color:#f5c518;">EIP</span></p>
             <p style="font-size:0.8rem; color:#3a4455;">Data generated mathematically to mimic World Bank &amp; IMF trends.</p>
             <div class="socials">
                 <a href="https://github.com/SSChitransh/Saransh-Economic-Intelligence-Platform" target="_blank">🐙 GitHub</a>
@@ -1176,7 +1164,6 @@
         }
 
         function polynomialRegression(x, y, degree) {
-            // Build Vandermonde matrix and solve via least squares (simple approach)
             const n = x.length;
             const X = [];
             for (let i = 0; i < n; i++) {
@@ -1186,11 +1173,9 @@
                 }
                 X.push(row);
             }
-            // Normal equation: (X^T X)^-1 X^T y
             const Xt = X[0].map((_, col) => X.map(row => row[col]));
             const XtX = Xt.map(row => X[0].map((_, j) => row.reduce((s, v, k) => s + v * X[k][j], 0)));
             const XtY = Xt.map(row => row.reduce((s, v, i) => s + v * y[i], 0));
-            // Solve using Gaussian elimination (small system)
             const nEq = XtX.length;
             const aug = XtX.map((row, i) => [...row, XtY[i]]);
             for (let col = 0; col < nEq; col++) {
@@ -1466,30 +1451,24 @@
             const baseUnemp = histUnemp[histUnemp.length - 1] || 5.0;
 
             // Policy impact functions (simplified causal model)
-            const eduImpact = (edu - 4.0) * 0.6; // more education -> higher GDP, lower poverty
-            const taxImpact = (tax - 22) * -0.15; // higher tax -> lower GDP, but more revenue
-            const tradeImpact = (trade - 60) * 0.08; // more trade -> higher GDP
-            const infraImpact = (infra - 3.0) * 0.5; // more infra -> higher GDP
+            const eduImpact = (edu - 4.0) * 0.6;
+            const taxImpact = (tax - 22) * -0.15;
+            const tradeImpact = (trade - 60) * 0.08;
+            const infraImpact = (infra - 3.0) * 0.5;
 
             const gdpImpact = eduImpact + taxImpact + tradeImpact + infraImpact;
             const gdpProjected = baseGDP + gdpImpact;
 
-            // Inflation: education & infra reduce inflation, tax & trade increase
             const infImpact = -eduImpact * 0.2 + taxImpact * 0.1 + tradeImpact * 0.05 - infraImpact * 0.15;
             const infProjected = baseInflation + infImpact;
 
-            // Poverty: strongly reduced by education, slightly by infra, increased by tax
             const povImpact = -eduImpact * 0.8 + taxImpact * 0.1 - infraImpact * 0.3;
             const povProjected = Math.max(0.1, basePoverty + povImpact);
 
-            // Education spending (projected)
             const eduProjected = baseEdu + (edu - 4.0) * 0.3;
-
-            // Unemployment: affected by GDP growth and tax
             const unempImpact = -gdpImpact * 0.2 + taxImpact * 0.05;
             const unempProjected = Math.max(2, baseUnemp + unempImpact);
 
-            // Update UI with colors
             const format = (v) => v.toFixed(1) + '%';
 
             const gdpEl = document.getElementById('impactGdp');
@@ -1574,7 +1553,7 @@
         function generateResearchPaper() {
             const content =
                 `============================================================
-        SARANSH'S ECONOMIC INTELLIGENCE PLATFORM v2
+        SARANSH'S ECONOMIC INTELLIGENCE PLATFORM
         AI-POWERED RESEARCH PAPER
         ============================================================
 
@@ -2031,7 +2010,7 @@
                 pptx.layout = 'WIDE';
 
                 const slides = [
-                    { title: '🧠 AI Economic Intelligence Platform v2', sub: 'Education Spending & Poverty Reduction · MIT 2026',
+                    { title: '🧠 Economic Intelligence Platform', sub: 'AI-Powered Economic Research · MIT 2026',
                         color: 'F5C518' },
                     { title: 'Research Overview', sub: '9 countries · 24 years · 7 indicators · 4 AI models',
                         color: 'F5C518' },
@@ -2052,7 +2031,7 @@
                         fontSize: 44, fontFace: 'Arial', bold: true });
                     slide.addText(s.sub, { x: 0, y: 3.5, w: 13.33, h: 1.2, align: 'center', color: 'E8EDF3',
                         fontSize: 30, fontFace: 'Arial' });
-                    slide.addText('MIT Maker Portfolio 2026 · AI v2', { x: 0, y: 5.5, w: 13.33, h: 0.8, align: 'center',
+                    slide.addText('MIT Maker Portfolio 2026 · EIP', { x: 0, y: 5.5, w: 13.33, h: 0.8, align: 'center',
                         color: '8892A0', fontSize: 22, fontFace: 'Arial' });
                 }
 
@@ -2065,7 +2044,7 @@
                 "cells": [{
                     "cell_type": "markdown",
                     "metadata": {},
-                    "source": ["# 🧠 Saransh Economic Intelligence Platform v2\\n",
+                    "source": ["# 🧠 Economic Intelligence Platform\\n",
                         "## AI-Powered Economic Forecasting & Policy Simulation\\n",
                         "This notebook implements multiple AI models for macroeconomic forecasting."
                     ]
@@ -2177,7 +2156,7 @@
                 switch (type) {
                     case 'research':
                         blob = generateResearchPaper();
-                        filename = 'Saransh_AI_Research_Paper.txt';
+                        filename = 'Saransh_EIP_Research_Paper.txt';
                         break;
                     case 'scatter': {
                         const canvas = generateScatterPlot();
@@ -2199,12 +2178,12 @@
                     }
                     case 'presentation': {
                         blob = await generatePresentation();
-                        filename = 'AI_Research_Presentation.pptx';
+                        filename = 'EIP_Research_Presentation.pptx';
                         break;
                     }
                     case 'sourcecode': {
                         blob = generateSourceCode();
-                        filename = 'Saransh_AI_Dashboard.ipynb';
+                        filename = 'EIP_Dashboard.ipynb';
                         break;
                     }
                     default:
@@ -2222,7 +2201,7 @@
         // ============================================================
         fullUpdate();
 
-        console.log('🧠 Saransh Economic Intelligence Platform v2 loaded.');
+        console.log('🧠 Economic Intelligence Platform (EIP) loaded.');
         console.log('📊 AI Models: Linear, Poly², Poly³, Ensemble');
         console.log('🔮 5‑year forecasts with confidence intervals');
         console.log('🧪 Policy Simulation Lab active');
