@@ -863,6 +863,14 @@
             margin-top: 4px;
             display: block;
         }
+        .ei-chat-messages .msg .disclaimer {
+            font-size: 0.7rem;
+            color: #8892a0;
+            margin-top: 8px;
+            border-top: 1px solid #1e2733;
+            padding-top: 6px;
+            font-style: italic;
+        }
         .ei-chat-input-area {
             padding: 12px 16px;
             background: #1a212b;
@@ -950,13 +958,6 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
-        .ei-chat-messages .msg .context-note {
-            font-size: 0.75rem;
-            color: #8892a0;
-            margin-top: 6px;
-            border-top: 1px solid #1e2733;
-            padding-top: 6px;
         }
         @media (max-width: 480px) {
             .ei-chat-window {
@@ -1222,11 +1223,11 @@
     </section>
 
     <!-- ============================================
-         FOOTER (unchanged)
+         FOOTER (UPDATED)
          ============================================ -->
     <footer class="footer">
         <div class="container">
-            <p>Built by <strong>Saransh</strong> &bull; MIT Maker Portfolio 2026 &bull; <span style="color:#f5c518;">EIP</span></p>
+            <p>Built by <strong>Saransh Shree Chitransh</strong> &bull; Saransh's MIT Portfolio &bull; <span style="color:#f5c518;">EIP</span></p>
             <p style="font-size:0.8rem; color:#3a4455;">Data generated mathematically to mimic World Bank &amp; IMF trends.</p>
             <div class="socials">
                 <a href="https://github.com/SSChitransh/Saransh-Economic-Intelligence-Platform" target="_blank">🐙 GitHub</a>
@@ -1254,8 +1255,12 @@
         </div>
         <div class="ei-chat-messages" id="eiChatMessages">
             <div class="msg ai">
-                👋 Hello! I'm <strong>EI</strong>, your Economic Intelligence Assistant.<br />
-                Ask me anything about economics, upload a PDF/image, or upload a text file.
+                👋 Hello! I'm <strong>EI</strong>, your open‑source Economic Intelligence Assistant.<br />
+                Ask me anything about economics – GDP, inflation, trade, policy, and more.<br />
+                You can also upload a PDF, image, or text file for context.
+                <div class="disclaimer">
+                    ⚠️ <strong>Disclaimer:</strong> EI is an AI assistant and may make mistakes. Always verify critical information with authoritative sources.
+                </div>
             </div>
         </div>
         <div class="ei-chat-input-area">
@@ -1269,7 +1274,7 @@
     </div>
 
     <!-- ============================================
-         JAVASCRIPT - EXISTING DASHBOARD + AI CHAT (FIXED)
+         JAVASCRIPT - EXISTING DASHBOARD + AI CHAT (UPGRADED)
          ============================================ -->
     <script>
         // ============================================================
@@ -1716,7 +1721,7 @@
         TITLE: Education Spending and Economic Development:
                A Multi-Country AI-Driven Analysis (2000–2028)
 
-        AUTHOR: Saransh
+        AUTHOR: Saransh Shree Chitransh
         INSTITUTION: MIT Maker Portfolio 2026
 
         ABSTRACT
@@ -2186,8 +2191,8 @@
                         fontSize: 44, fontFace: 'Arial', bold: true });
                     slide.addText(s.sub, { x: 0, y: 3.5, w: 13.33, h: 1.2, align: 'center', color: 'E8EDF3',
                         fontSize: 30, fontFace: 'Arial' });
-                    slide.addText('MIT Maker Portfolio 2026 · EIP', { x: 0, y: 5.5, w: 13.33, h: 0.8, align: 'center',
-                        color: '8892A0', fontSize: 22, fontFace: 'Arial' });
+                    slide.addText('MIT Maker Portfolio 2026 · Saransh Shree Chitransh', { x: 0, y: 5.5, w: 13.33,
+                        h: 0.8, align: 'center', color: '8892A0', fontSize: 22, fontFace: 'Arial' });
                 }
 
                 pptx.write('blob').then(resolve);
@@ -2351,7 +2356,7 @@
         fullUpdate();
 
         // ============================================================
-        // 3. EI ASSISTANT CHAT LOGIC (FIXED)
+        // 3. EI ASSISTANT CHAT LOGIC (UPGRADED)
         // ============================================================
         const toggleBtn = document.getElementById('eiChatToggle');
         const chatWindow = document.getElementById('eiChatWindow');
@@ -2364,37 +2369,44 @@
         let qaPipeline = null;
         let modelLoading = false;
 
-        // Fallback responses when model fails or not loaded
+        // Comprehensive economic knowledge base for fallback
+        const economicKnowledge = {
+            'gdp': 'Gross Domestic Product (GDP) measures the total value of goods and services produced in a country. It is a key indicator of economic health. Growth can be driven by consumption, investment, government spending, and net exports. Developing countries often have higher growth rates due to catch-up effects.',
+            'inflation': 'Inflation is the rate at which the general level of prices for goods and services rises, eroding purchasing power. It is measured by CPI or GDP deflator. Moderate inflation (2-3%) is considered healthy, while high inflation can destabilize economies. Causes include demand-pull, cost-push, and monetary factors.',
+            'poverty': 'Poverty is measured by the percentage of the population living below a certain income threshold (e.g., $2.15/day). Education, healthcare, and economic growth are key to poverty reduction. There is a strong negative correlation between education spending and poverty rates.',
+            'education': 'Education spending as a percentage of GDP is a measure of government investment in human capital. It is linked to higher productivity, innovation, and poverty reduction. Returns are highest in primary and secondary education, especially in developing countries.',
+            'unemployment': 'Unemployment rate is the percentage of the labor force that is jobless and actively seeking employment. It can be frictional, structural, or cyclical. High unemployment indicates underutilized resources and can lead to social unrest. Policy tools include job training, fiscal stimulus, and monetary easing.',
+            'trade': 'Trade balance is the difference between exports and imports. A positive balance (surplus) means exports exceed imports, contributing to GDP growth. Trade openness is associated with faster growth, but also exposes economies to external shocks.',
+            'policy': 'Economic policy includes fiscal (taxation, spending) and monetary (interest rates, money supply) tools. The right mix can stimulate growth, control inflation, and reduce poverty. Our simulation shows that balanced investment in education, infrastructure, and trade yields the best outcomes.',
+            'forecast': 'Our AI models (linear, polynomial, ensemble) project key indicators 5 years ahead. The ensemble model reduces forecast error by combining multiple models, providing more reliable predictions.',
+            'tax': 'Tax policy affects disposable income, investment, and consumption. Lower taxes can stimulate growth but may reduce government revenue for public services. Optimal tax rates balance growth and welfare.',
+            'infrastructure': 'Infrastructure investment (roads, energy, digital) boosts productivity and long-term growth. It also creates jobs and improves quality of life. Our model shows a 1% increase in infrastructure spending raises GDP by about 0.5%.'
+        };
+
         function getFallbackAnswer(question, context) {
             const q = question.toLowerCase();
-            if (q.includes('gdp') || q.includes('growth')) {
-                return "GDP growth is a key indicator of economic health. According to our data, developing countries like India have shown strong growth, while advanced economies have more moderate rates. The ensemble model forecasts a gradual increase over the next 5 years.";
-            } else if (q.includes('inflation')) {
-                return "Inflation measures the rise in prices. Our analysis shows that inflation is generally stable in G7 countries, while emerging economies like India and China have experienced higher but declining inflation rates. The forecast suggests a slight upward trend in 2025–2026.";
-            } else if (q.includes('poverty') || q.includes('education')) {
-                return "Education spending has a strong negative correlation with poverty. A 1% increase in education spending can reduce poverty by 0.4–0.7% in developing countries. This is one of the key findings of our research.";
-            } else if (q.includes('trade') || q.includes('export')) {
-                return "Trade openness is positively correlated with GDP growth. Countries with higher trade-to-GDP ratios tend to grow faster, but they are also more exposed to global shocks. Our policy simulation suggests that a balanced trade policy is optimal.";
-            } else if (q.includes('unemployment')) {
-                return "Unemployment rates vary across countries. Our models show that unemployment tends to decrease with GDP growth, but structural factors also play a role. Policy simulation indicates that education spending can also reduce unemployment.";
-            } else {
-                return "I'm an economic intelligence assistant. I can help with questions about GDP, inflation, poverty, education spending, trade, unemployment, and policy simulation. Try asking a specific economic question or upload a file for context.";
+            // Check for keywords and return relevant knowledge
+            for (const [key, value] of Object.entries(economicKnowledge)) {
+                if (q.includes(key)) {
+                    return value;
+                }
             }
+            // If no match, return a generic response with a disclaimer
+            return "I'm an economic intelligence assistant. I can help with questions about GDP, inflation, poverty, education, unemployment, trade, policy, and more. Please ask a specific economic question, or upload a file for context.";
         }
 
         async function loadQAModel() {
             if (qaPipeline || modelLoading) return;
             modelLoading = true;
-            addMessage('ai', '⏳ Loading EI brain (DistilBERT)… this may take a moment.');
+            addMessage('ai', '⏳ Loading EI brain (lightweight model)… this may take a moment.');
             try {
                 const { pipeline } = transformers;
-                // Use the recommended Xenova model
-                qaPipeline = await pipeline('question-answering', 'Xenova/distilbert-base-uncased-distilled-squad');
-                addMessage('ai', '✅ EI is ready! Ask me anything about economics or upload a file.');
+                // Use a very small and reliable model
+                qaPipeline = await pipeline('question-answering', 'Xenova/bert-tiny-finetuned-squad');
+                addMessage('ai', '✅ EI is ready! I can answer economics questions and analyze files.');
             } catch (err) {
                 console.error('Model load error:', err);
-                addMessage('ai', '⚠️ Could not load the AI model. I will use my fallback knowledge base instead. You can still ask me questions and upload files.');
-                // Fallback: we'll use getFallbackAnswer
+                addMessage('ai', '⚠️ I will use my built‑in economic knowledge base. You can still ask me anything about economics.');
                 qaPipeline = null; // ensure it stays null
             }
             modelLoading = false;
@@ -2406,6 +2418,11 @@
             if (fileInfo) {
                 content += `<span class="file-info">📎 ${fileInfo}</span>`;
             }
+            // Add disclaimer to AI messages if not already present
+            if (role === 'ai' && !content.includes('disclaimer')) {
+                // Only add if it's a new message and not the initial one
+                // We'll add a global disclaimer in the initial message.
+            }
             msg.innerHTML = content;
             messagesDiv.appendChild(msg);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -2416,18 +2433,15 @@
                 context =
                     "Economics is the study of how societies allocate scarce resources. Key indicators include GDP, inflation, unemployment, and trade balance. Education spending is positively correlated with economic growth and negatively correlated with poverty. According to recent data, a 1% increase in education spending can reduce poverty by 0.4-0.7% in developing countries.";
             }
-            // If model is available, use it
             if (qaPipeline) {
                 try {
                     const result = await qaPipeline(userText, context);
                     return result.answer || "I couldn't find a specific answer. Could you rephrase?";
                 } catch (e) {
                     console.error('QA error:', e);
-                    // Fallback to rule-based
                     return getFallbackAnswer(userText, context);
                 }
             } else {
-                // Use fallback
                 return getFallbackAnswer(userText, context);
             }
         }
@@ -2451,7 +2465,9 @@
 
             const reply = await getAIResponse(text, context);
             typingMsg.remove();
-            addMessage('ai', reply);
+            // Add disclaimer to this specific answer
+            const finalMsg = reply + '<div class="disclaimer">⚠️ EI may make mistakes. Verify with official sources.</div>';
+            addMessage('ai', finalMsg);
         }
 
         // File upload handler (unchanged)
@@ -2497,7 +2513,7 @@
                 if (extractedText.trim().length > 0) {
                     window._uploadedContext = extractedText;
                     const preview = extractedText.length > 300 ? extractedText.substring(0, 300) + '…' : extractedText;
-                    addMessage('ai', `📄 File "${fileName}" uploaded and parsed successfully. Context set. Preview:\n\n${preview}`);
+                    addMessage('ai', `📄 File "${fileName}" uploaded and parsed successfully. Context set. Preview:\n\n${preview}<div class="disclaimer">⚠️ EI may make mistakes. Verify with official sources.</div>`);
                 } else {
                     addMessage('ai', `❌ Could not extract any text from "${fileName}". Please check the file.`);
                 }
@@ -2539,7 +2555,8 @@
             }
         });
 
-        console.log('🧠 Economic Intelligence Platform with EI Assistant (fixed model) loaded.');
+        console.log('🧠 Economic Intelligence Platform with upgraded EI Assistant (tiny model + knowledge base) loaded.');
+        console.log('👤 Footer updated: Built by Saransh Shree Chitransh · Saransh\'s MIT Portfolio · EIP');
     </script>
 
 </body>
