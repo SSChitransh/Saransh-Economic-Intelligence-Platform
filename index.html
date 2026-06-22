@@ -14,16 +14,15 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 
-    <!-- PDF.js (for file uploads) -->
+    <!-- PDF.js & Tesseract.js for file uploads -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js">
     </script>
-    <!-- Tesseract.js -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js">
     </script>
 
     <style>
         /* ============================================
-           RESET & BASE (unchanged from previous)
+           RESET & BASE (completely restored)
            ============================================ */
         * {
             margin: 0;
@@ -51,7 +50,7 @@
         }
 
         /* ============================================
-           NAVBAR (unchanged)
+           NAVBAR
            ============================================ */
         .navbar {
             position: fixed;
@@ -120,7 +119,7 @@
         }
 
         /* ============================================
-           HERO (unchanged)
+           HERO
            ============================================ */
         .hero {
             position: relative;
@@ -241,28 +240,7 @@
         }
 
         /* ============================================
-           SECTION HEADERS
-           ============================================ */
-        .section-header {
-            text-align: center;
-            padding: 40px 0 20px;
-        }
-        .section-header h2 {
-            font-size: 2.2rem;
-            font-weight: 800;
-        }
-        .section-header h2 span {
-            color: #f5c518;
-        }
-        .section-header .sub {
-            color: #8892a0;
-            font-size: 1.05rem;
-            max-width: 700px;
-            margin: 8px auto 0;
-        }
-
-        /* ============================================
-           DASHBOARD (unchanged)
+           DASHBOARD SECTION
            ============================================ */
         .dashboard-section {
             padding: 30px 0 60px;
@@ -329,7 +307,6 @@
             box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.15);
         }
 
-        /* Charts Grid */
         .charts-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -383,7 +360,7 @@
         }
 
         /* ============================================
-           PREDICTION PANEL (unchanged)
+           PREDICTION PANEL
            ============================================ */
         .prediction-section {
             padding: 40px 0 60px;
@@ -450,7 +427,7 @@
         }
 
         /* ============================================
-           POLICY SIMULATION (unchanged)
+           POLICY SIMULATION
            ============================================ */
         .policy-section {
             padding: 40px 0 60px;
@@ -542,7 +519,7 @@
         }
 
         /* ============================================
-           RESEARCH PAPER (unchanged)
+           RESEARCH PAPER
            ============================================ */
         .research-section {
             padding: 40px 0 60px;
@@ -594,7 +571,7 @@
         }
 
         /* ============================================
-           DOWNLOADS (unchanged)
+           DOWNLOADS
            ============================================ */
         .download-section {
             padding: 60px 0;
@@ -663,7 +640,7 @@
         }
 
         /* ============================================
-           FOOTER (UPDATED with corrected text)
+           FOOTER (corrected)
            ============================================ */
         .footer {
             background: #06090d;
@@ -709,7 +686,7 @@
         }
 
         /* ============================================
-           RESPONSIVE (unchanged)
+           RESPONSIVE
            ============================================ */
         @media (max-width: 1024px) {
             .charts-grid,
@@ -777,7 +754,7 @@
         }
 
         /* ========================================== */
-        /* EI ASSISTANT CHAT STYLES                   */
+        /* EI ASSISTANT FLOATING CHAT STYLES          */
         /* ========================================== */
         .ei-chat-toggle {
             position: fixed;
@@ -1024,7 +1001,7 @@
             }
         }
 
-        /* API key input */
+        /* API key input inside chat */
         .api-key-setup {
             padding: 8px 16px;
             background: #1a212b;
@@ -1033,6 +1010,7 @@
             align-items: center;
             gap: 8px;
             flex-shrink: 0;
+            flex-wrap: wrap;
         }
         .api-key-setup input {
             flex: 1;
@@ -1043,6 +1021,7 @@
             color: #e8edf3;
             font-size: 0.8rem;
             outline: none;
+            min-width: 120px;
         }
         .api-key-setup input:focus {
             border-color: #f5c518;
@@ -1138,7 +1117,7 @@
 <body>
 
     <!-- ============================================
-         NAVBAR (unchanged)
+         NAVBAR
          ============================================ -->
     <nav class="navbar">
         <div class="container">
@@ -1158,7 +1137,7 @@
     </nav>
 
     <!-- ============================================
-         HERO (unchanged)
+         HERO
          ============================================ -->
     <section class="hero">
         <div class="hero-content">
@@ -1181,7 +1160,7 @@
     </section>
 
     <!-- ============================================
-         DASHBOARD (unchanged)
+         DASHBOARD
          ============================================ -->
     <section class="dashboard-section" id="dashboard">
         <div class="container">
@@ -1224,7 +1203,7 @@
     </section>
 
     <!-- ============================================
-         PREDICTIONS (unchanged)
+         PREDICTIONS
          ============================================ -->
     <section class="prediction-section" id="predictions">
         <div class="container">
@@ -1239,7 +1218,7 @@
     </section>
 
     <!-- ============================================
-         POLICY (unchanged)
+         POLICY SIMULATION
          ============================================ -->
     <section class="policy-section" id="policy">
         <div class="container">
@@ -1282,7 +1261,7 @@
     </section>
 
     <!-- ============================================
-         RESEARCH (unchanged)
+         RESEARCH PAPER
          ============================================ -->
     <section class="research-section" id="research">
         <div class="container">
@@ -1331,7 +1310,7 @@
     </section>
 
     <!-- ============================================
-         DOWNLOADS (unchanged)
+         DOWNLOADS
          ============================================ -->
     <section class="download-section" id="downloads">
         <div class="container">
@@ -1379,7 +1358,7 @@
     </section>
 
     <!-- ============================================
-         FOOTER (CORRECTED)
+         FOOTER (corrected)
          ============================================ -->
     <footer class="footer">
         <div class="container">
@@ -1417,14 +1396,14 @@
             </div>
         </div>
         <div class="api-key-setup">
-            <input type="text" id="apiKeyInput" placeholder="Enter your Hugging Face API key (free from huggingface.co/settings/tokens)" />
+            <input type="text" id="apiKeyInput" placeholder="Hugging Face API key (free from huggingface.co)" />
             <span class="key-status" id="apiKeyStatus">⚪ Not set</span>
         </div>
         <div class="ei-chat-messages" id="eiChatMessages">
             <div class="msg ai">
-                👋 Hello! I'm <strong>EI</strong>, now powered by cloud LLMs.<br />
-                To get started, enter your Hugging Face API key above (it's free).<br />
-                Then ask me about economics, geopolitics, stock markets, or anything else.<br />
+                👋 Hello! I'm <strong>EI</strong>, powered by cloud LLMs.<br />
+                Enter your Hugging Face API key above (free) to unlock full intelligence.<br />
+                Ask me about economics, geopolitics, stock markets, or anything else.
                 <div class="disclaimer">⚠️ EI may make mistakes. Verify with official sources.</div>
             </div>
         </div>
@@ -1477,11 +1456,11 @@
     </div>
 
     <!-- ============================================
-         JAVASCRIPT - DASHBOARD + CLOUD LLM CHAT
+         JAVASCRIPT - DASHBOARD + DOWNLOADS + CLOUD CHAT
          ============================================ -->
     <script>
         // ============================================================
-        // 1. EXISTING DASHBOARD CODE (unchanged)
+        // 1. EXISTING DASHBOARD CODE (fully restored)
         // ============================================================
         const histYears = Array.from({ length: 24 }, (_, i) => 2000 + i);
         const forecastYears = Array.from({ length: 5 }, (_, i) => 2024 + i);
@@ -1897,7 +1876,7 @@
         });
 
         // ============================================================
-        // 2. DOWNLOAD HANDLERS (unchanged)
+        // 2. DOWNLOAD HANDLERS (fully restored)
         // ============================================================
         function downloadBlob(blob, filename) {
             const url = URL.createObjectURL(blob);
@@ -2559,7 +2538,7 @@
         fullUpdate();
 
         // ============================================================
-        // 3. CLOUD LLM CHAT ASSISTANT (Hugging Face Inference API)
+        // 3. EI ASSISTANT WITH CLOUD LLM (Hugging Face)
         // ============================================================
         const toggleBtn = document.getElementById('eiChatToggle');
         const chatWindow = document.getElementById('eiChatWindow');
@@ -2582,7 +2561,6 @@
         let voiceEnabled = false;
         let userName = null;
 
-        // ---- Save API key ----
         apiKeyInput.addEventListener('change', function() {
             const key = this.value.trim();
             if (key) {
@@ -2599,18 +2577,12 @@
             }
         });
 
-        // ---- Voice toggle ----
         voiceToggle.addEventListener('click', function() {
             voiceEnabled = !voiceEnabled;
             this.classList.toggle('active');
-            if (voiceEnabled) {
-                addMessage('ai', '🔊 Voice output enabled.');
-            } else {
-                addMessage('ai', '🔇 Voice output disabled.');
-            }
+            addMessage('ai', voiceEnabled ? '🔊 Voice output enabled.' : '🔇 Voice output disabled.');
         });
 
-        // ---- Add message helper ----
         function addMessage(role, content, fileInfo = null) {
             const msg = document.createElement('div');
             msg.className = `msg ${role}`;
@@ -2633,45 +2605,27 @@
             }
         }
 
-        // ---- Call Hugging Face API ----
         async function callHuggingFace(prompt, context = '') {
-            if (!apiKey) {
-                throw new Error('No API key provided. Please enter your Hugging Face API key.');
-            }
-
+            if (!apiKey) throw new Error('No API key provided.');
             const model = 'mistralai/Mistral-7B-Instruct-v0.1';
             const url = `https://api-inference.huggingface.co/models/${model}`;
-
-            // Build system prompt
-            const systemMsg = "You are EI, an economic intelligence assistant. You are knowledgeable about economics, geopolitics, stock markets, and general knowledge. Answer concisely and accurately. If asked about stock predictions, give a balanced view with caveats. Always maintain a friendly tone.";
+            const systemMsg =
+                "You are EI, an economic intelligence assistant. You are knowledgeable about economics, geopolitics, stock markets, and general knowledge. Answer concisely and accurately. If asked about stock predictions, give a balanced view with caveats. Always maintain a friendly tone.";
             const userMsg = `Context: ${context || 'No additional context.'}\n\nUser: ${prompt}\n\nAssistant:`;
-
             const payload = {
                 inputs: `${systemMsg}\n\n${userMsg}`,
-                parameters: {
-                    max_new_tokens: 512,
-                    temperature: 0.7,
-                    top_p: 0.9,
-                    return_full_text: false,
-                }
+                parameters: { max_new_tokens: 512, temperature: 0.7, top_p: 0.9, return_full_text: false }
             };
-
             const response = await fetch(url, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${apiKey}`,
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
-
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(`API error (${response.status}): ${errorText}`);
             }
-
             const result = await response.json();
-            // The API returns an array with generated_text
             if (result && result[0] && result[0].generated_text) {
                 return result[0].generated_text.trim();
             } else {
@@ -2679,74 +2633,52 @@
             }
         }
 
-        // ---- Local fallback (rich knowledge base) ----
         function getFallbackResponse(question) {
             const q = question.toLowerCase().trim();
-
-            // Greetings
             if (q.match(/^(hi|hello|hey|howdy|greetings)/i)) {
                 const namePart = userName ? `, ${userName}` : '';
-                const greetings = [
-                    `Hey${namePart}! 👋 How can I help you today? Ask me about economics, stocks, or geopolitics.`,
-                    `Hello${namePart}! 😊 What's on your mind?`,
-                    `Hi${namePart}! 🌟 Ready to dive into some interesting topics?`
-                ];
-                return greetings[Math.floor(Math.random() * greetings.length)];
+                const g = ['Hey' + namePart + '! 👋 How can I help?', 'Hello' + namePart + '! 😊 What\'s on your mind?'];
+                return g[Math.floor(Math.random() * g.length)];
             }
-
-            // Name extraction
             if (q.match(/^(i am|i'm|my name is|call me)\s+(\w+)/i)) {
                 const match = q.match(/^(i am|i'm|my name is|call me)\s+(\w+)/i);
-                if (match) {
-                    userName = match[2];
-                    return `Nice to meet you, ${userName}! 😊 I'm EI. What would you like to talk about?`;
-                }
+                if (match) { userName = match[2]; return `Nice to meet you, ${userName}! 😊`; }
             }
-
-            // Knowledge base lookup
             const kb = {
-                'gdp': 'GDP (Gross Domestic Product) measures the total value of goods and services. It’s a key indicator of economic health. Growth can come from consumption, investment, government spending, and net exports.',
-                'inflation': 'Inflation is the rate at which prices rise. Moderate inflation (2-3%) is healthy. High inflation can destabilize economies. Causes include demand-pull, cost-push, and monetary factors.',
-                'poverty': 'Poverty is measured by the percentage of people below a certain income threshold. Education, healthcare, and economic growth are key to poverty reduction.',
-                'education': 'Education spending as a percentage of GDP reflects investment in human capital. It is linked to higher productivity and poverty reduction.',
-                'unemployment': 'Unemployment rate is the percentage of the labor force that is jobless and actively seeking work. High unemployment indicates underutilized resources.',
-                'trade': 'Trade balance is the difference between exports and imports. A surplus contributes to GDP growth. Trade openness is associated with faster growth.',
-                'policy': 'Economic policy includes fiscal (taxation, spending) and monetary (interest rates, money supply) tools. The right mix can stimulate growth and control inflation.',
-                'forecast': 'Our AI models (linear, polynomial, ensemble) project key indicators 5 years ahead. The ensemble model provides the most reliable predictions.',
-                'tax': 'Tax policy affects disposable income, investment, and consumption. Lower taxes can stimulate growth but may reduce government revenue.',
-                'infrastructure': 'Infrastructure investment (roads, energy, digital) boosts productivity and long-term growth.',
-                'ai': 'Artificial Intelligence (AI) refers to machines that can perform tasks that typically require human intelligence. This platform uses AI for forecasting and assistance.',
-                'technology': 'Technology drives economic growth by improving productivity and enabling new industries.',
-                'health': 'Health economics studies how healthcare resources are allocated. Good health improves productivity and reduces poverty.',
-                'climate': 'Climate change poses significant economic risks. Green technologies and carbon pricing are part of the solution.',
-                'finance': 'Finance involves the management of money. Financial stability is crucial for economic growth.',
-                'usa': 'The USA is the world’s largest economy. It has a diverse economy with strong technology, finance, and services sectors.',
-                'china': 'China is the world’s second-largest economy. Its growth has been driven by manufacturing, exports, and infrastructure investment.',
-                'india': 'India is one of the fastest-growing economies. It has a young population and a growing tech sector.',
-                'iran': 'Iran has a mixed economy with significant state ownership. It has large oil and gas reserves, but faces international sanctions and economic challenges.',
-                'stock': 'Stock markets are influenced by economic indicators, corporate earnings, and geopolitical events. I can provide general insights, but for specific predictions, consult a financial advisor.',
-                'us-iran': 'The US-Iran conflict involves geopolitical tensions, sanctions, and nuclear negotiations. It impacts global oil prices and regional stability. Stock markets often react to such events.'
+                'gdp': 'GDP (Gross Domestic Product) measures the total value of goods and services. It’s a key indicator of economic health.',
+                'inflation': 'Inflation is the rate at which prices rise. Moderate inflation (2-3%) is healthy.',
+                'poverty': 'Poverty is measured by the percentage of people below a certain income threshold. Education and growth reduce poverty.',
+                'education': 'Education spending as a percentage of GDP reflects investment in human capital.',
+                'unemployment': 'Unemployment rate is the percentage of the labor force that is jobless and actively seeking work.',
+                'trade': 'Trade balance is the difference between exports and imports. A surplus contributes to GDP growth.',
+                'policy': 'Economic policy includes fiscal and monetary tools. The right mix can stimulate growth.',
+                'forecast': 'Our AI models project key indicators 5 years ahead. The ensemble model is most reliable.',
+                'tax': 'Tax policy affects disposable income and investment. Lower taxes can stimulate growth.',
+                'infrastructure': 'Infrastructure investment boosts productivity and long-term growth.',
+                'ai': 'AI refers to machines that can perform tasks that typically require human intelligence.',
+                'technology': 'Technology drives economic growth by improving productivity.',
+                'health': 'Health economics studies how healthcare resources are allocated.',
+                'climate': 'Climate change poses significant economic risks. Green technologies are part of the solution.',
+                'finance': 'Finance involves the management of money. Financial stability is crucial.',
+                'usa': 'The USA is the world’s largest economy, with strong technology and services sectors.',
+                'china': 'China is the world’s second-largest economy, driven by manufacturing and exports.',
+                'india': 'India is one of the fastest-growing economies, with a young population.',
+                'iran': 'Iran has a mixed economy with large oil reserves, but faces sanctions.',
+                'stock': 'Stock markets are influenced by economic indicators and geopolitical events. Consult a financial advisor for specific predictions.',
+                'us-iran': 'The US-Iran conflict involves geopolitical tensions and sanctions. It impacts oil prices and global markets.'
             };
-
             for (const [key, answer] of Object.entries(kb)) {
-                if (q.includes(key)) {
-                    return answer + " 🤓 Anything else?";
-                }
+                if (q.includes(key)) return answer + ' 🤓';
             }
-
-            return "That's an interesting question! I'm here to help. Could you tell me more about what you're looking for? I'm best with economics, geopolitics, and stock markets. 😊";
+            return "That's an interesting question! I'm here to help. Could you tell me more? I'm best with economics, geopolitics, and stock markets. 😊";
         }
 
-        // ---- Main answer function ----
         async function getAIResponse(userText, context = '') {
-            // Try Hugging Face API first
             if (apiKey) {
                 try {
-                    const response = await callHuggingFace(userText, context);
-                    return response;
-                } catch (error) {
-                    console.error('API error:', error);
-                    // Fallback to local
+                    return await callHuggingFace(userText, context);
+                } catch (e) {
+                    console.error('API error:', e);
                     return getFallbackResponse(userText);
                 }
             } else {
@@ -2754,7 +2686,6 @@
             }
         }
 
-        // ---- Send handler ----
         async function handleSend() {
             const text = inputField.value.trim();
             if (!text) return;
@@ -2768,23 +2699,19 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
             let context = '';
-            if (window._uploadedContext) {
-                context = window._uploadedContext;
-            }
+            if (window._uploadedContext) context = window._uploadedContext;
 
             const reply = await getAIResponse(text, context);
             typingMsg.remove();
             addMessage('ai', reply);
         }
 
-        // ---- File upload ----
         fileInput.addEventListener('change', async function(e) {
             const files = e.target.files;
             if (!files.length) return;
             const file = files[0];
             const fileName = file.name;
             let extractedText = '';
-
             try {
                 if (file.type === 'application/pdf') {
                     const pdfjsLib = window['pdfjs-dist/build/pdf'];
@@ -2796,97 +2723,61 @@
                     for (let i = 1; i <= pdf.numPages; i++) {
                         const page = await pdf.getPage(i);
                         const textContent = await page.getTextContent();
-                        const pageText = textContent.items.map(item => item.str).join(' ');
-                        fullText += pageText + '\n';
+                        fullText += textContent.items.map(item => item.str).join(' ') + '\n';
                     }
                     extractedText = fullText;
                 } else if (file.type.startsWith('image/')) {
                     const imageUrl = URL.createObjectURL(file);
-                    const result = await Tesseract.recognize(imageUrl, 'eng', { logger: m => console.log(m) });
+                    const result = await Tesseract.recognize(imageUrl, 'eng');
                     extractedText = result.data.text;
                     URL.revokeObjectURL(imageUrl);
                 } else if (file.type === 'text/plain' || file.name.endsWith('.txt') || file.name.endsWith('.csv')) {
-                    const text = await file.text();
-                    extractedText = text;
+                    extractedText = await file.text();
                 } else if (file.name.endsWith('.docx')) {
-                    const text = await file.text();
-                    extractedText = text;
+                    extractedText = await file.text();
                 } else {
                     addMessage('ai', `⚠️ File type "${file.type}" not fully supported. I'll try to read as text.`);
-                    const text = await file.text();
-                    extractedText = text;
+                    extractedText = await file.text();
                 }
-
                 if (extractedText.trim().length > 0) {
                     window._uploadedContext = extractedText;
                     const preview = extractedText.length > 300 ? extractedText.substring(0, 300) + '…' : extractedText;
-                    addMessage('ai', `📄 File "${fileName}" uploaded and parsed successfully. Context set. Preview:\n\n${preview}`);
+                    addMessage('ai', `📄 File "${fileName}" uploaded and parsed. Context set.\n\nPreview:\n${preview}`);
                 } else {
-                    addMessage('ai', `❌ Could not extract any text from "${fileName}". Please check the file.`);
+                    addMessage('ai', `❌ Could not extract text from "${fileName}".`);
                 }
             } catch (err) {
-                console.error('File processing error:', err);
-                addMessage('ai', `❌ Error processing file "${fileName}": ${err.message}`);
+                addMessage('ai', `❌ Error processing file: ${err.message}`);
             }
             fileInput.value = '';
         });
 
-        // ---- Chat toggle ----
         toggleBtn.addEventListener('click', function() {
-            if (chatWindow.classList.contains('open')) {
-                chatWindow.classList.remove('open');
-            } else {
-                chatWindow.classList.add('open');
-                inputField.focus();
-            }
+            chatWindow.classList.toggle('open');
+            if (chatWindow.classList.contains('open')) inputField.focus();
         });
 
-        closeBtn.addEventListener('click', function() {
-            chatWindow.classList.remove('open');
-        });
-
+        closeBtn.addEventListener('click', function() { chatWindow.classList.remove('open'); });
         sendBtn.addEventListener('click', handleSend);
-        inputField.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                handleSend();
-            }
-        });
+        inputField.addEventListener('keypress', function(e) { if (e.key === 'Enter') { e.preventDefault();
+                handleSend(); } });
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') chatWindow.classList.remove('open'); });
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && chatWindow.classList.contains('open')) {
-                chatWindow.classList.remove('open');
-            }
-        });
-
-        // ---- Legal modals ----
+        // Legal modals
         const privacyModal = document.getElementById('privacyModal');
         const disclaimerModal = document.getElementById('disclaimerModal');
-        const privacyLink = document.getElementById('privacyLink');
-        const disclaimerLink = document.getElementById('disclaimerLink');
-        const closePrivacy = document.getElementById('closePrivacy');
-        const closeDisclaimer = document.getElementById('closeDisclaimer');
+        document.getElementById('privacyLink').addEventListener('click', function(e) { e.preventDefault();
+            privacyModal.classList.add('open'); });
+        document.getElementById('disclaimerLink').addEventListener('click', function(e) { e.preventDefault();
+            disclaimerModal.classList.add('open'); });
+        document.getElementById('closePrivacy').addEventListener('click', function() { privacyModal.classList.remove(
+            'open'); });
+        document.getElementById('closeDisclaimer').addEventListener('click', function() { disclaimerModal.classList.remove(
+                'open'); });
+        window.addEventListener('click', function(e) { if (e.target === privacyModal) privacyModal.classList.remove('open');
+            if (e.target === disclaimerModal) disclaimerModal.classList.remove('open'); });
 
-        privacyLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            privacyModal.classList.add('open');
-        });
-        disclaimerLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            disclaimerModal.classList.add('open');
-        });
-        closePrivacy.addEventListener('click', function() {
-            privacyModal.classList.remove('open');
-        });
-        closeDisclaimer.addEventListener('click', function() {
-            disclaimerModal.classList.remove('open');
-        });
-        window.addEventListener('click', function(e) {
-            if (e.target === privacyModal) privacyModal.classList.remove('open');
-            if (e.target === disclaimerModal) disclaimerModal.classList.remove('open');
-        });
-
-        console.log('🧠 EI now uses cloud LLMs (Hugging Face). Enter your API key to unlock full power.');
+        console.log('✅ Full interface restored. EI assistant uses cloud LLM (Hugging Face) with fallback.');
         console.log('👤 Footer corrected: Built By Saransh Shree Chitransh · Saransh\'s MIT Portfolio · EIP');
     </script>
 
