@@ -14,7 +14,15 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 
-    <!-- PDF.js & Tesseract.js for file uploads -->
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js">
+    </script>
+
+    <!-- PDF.js & Tesseract.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js">
@@ -22,7 +30,7 @@
 
     <style>
         /* ============================================
-           RESET & BASE (fully restored)
+           RESET & BASE
            ============================================ */
         * {
             margin: 0;
@@ -50,7 +58,7 @@
         }
 
         /* ============================================
-           NAVBAR
+           NAVBAR (with auth)
            ============================================ */
         .navbar {
             position: fixed;
@@ -116,6 +124,148 @@
         .navbar .nav-links .btn-nav:hover {
             background: #ffd700;
             transform: scale(1.04);
+        }
+
+        /* Auth section */
+        .auth-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .auth-section .user-email {
+            color: #8892a0;
+            font-size: 0.8rem;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .auth-btn {
+            background: #1a212b;
+            border: 1px solid #1e2733;
+            color: #e8edf3;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .auth-btn:hover {
+            border-color: #f5c518;
+            color: #f5c518;
+        }
+        .auth-btn.primary {
+            background: #f5c518;
+            color: #0a0e14;
+            border: none;
+        }
+        .auth-btn.primary:hover {
+            background: #ffd700;
+        }
+
+        /* ============================================
+           AUTH MODAL
+           ============================================ */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+        }
+        .auth-modal.open {
+            display: flex;
+        }
+        .auth-modal .content {
+            background: #1a212b;
+            border-radius: 24px;
+            padding: 32px 40px;
+            max-width: 420px;
+            width: 90%;
+            border: 1px solid #1e2733;
+            position: relative;
+        }
+        .auth-modal .content h2 {
+            color: #f5c518;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .auth-modal .content input {
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 50px;
+            border: 1px solid #1e2733;
+            background: #0a0e14;
+            color: #e8edf3;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            outline: none;
+        }
+        .auth-modal .content input:focus {
+            border-color: #f5c518;
+        }
+        .auth-modal .content .auth-submit {
+            width: 100%;
+            padding: 10px;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(135deg, #f5c518, #ff8c00);
+            color: #0a0e14;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+        .auth-modal .content .auth-submit:hover {
+            transform: scale(1.02);
+        }
+        .auth-modal .content .google-btn {
+            width: 100%;
+            padding: 10px;
+            border-radius: 50px;
+            border: 1px solid #1e2733;
+            background: #0a0e14;
+            color: #e8edf3;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .auth-modal .content .google-btn:hover {
+            border-color: #f5c518;
+        }
+        .auth-modal .content .toggle-auth {
+            text-align: center;
+            margin-top: 12px;
+            color: #8892a0;
+            font-size: 0.9rem;
+        }
+        .auth-modal .content .toggle-auth a {
+            color: #f5c518;
+            cursor: pointer;
+        }
+        .auth-modal .content .toggle-auth a:hover {
+            text-decoration: underline;
+        }
+        .auth-modal .content .close-auth {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: #8892a0;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .auth-modal .content .close-auth:hover {
+            color: #f5c518;
         }
 
         /* ============================================
@@ -640,7 +790,7 @@
         }
 
         /* ============================================
-           FOOTER (corrected grammar)
+           FOOTER
            ============================================ */
         .footer {
             background: #06090d;
@@ -1001,7 +1151,50 @@
             }
         }
 
-        /* API key input inside chat */
+        /* Settings panel */
+        .settings-panel {
+            padding: 8px 16px;
+            background: #1a212b;
+            border-bottom: 1px solid #1e2733;
+            display: none;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        .settings-panel.open {
+            display: flex;
+        }
+        .settings-panel label {
+            font-size: 0.8rem;
+            color: #8892a0;
+        }
+        .settings-panel select,
+        .settings-panel input {
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid #1e2733;
+            background: #0a0e14;
+            color: #e8edf3;
+            font-size: 0.8rem;
+            outline: none;
+        }
+        .settings-panel select:focus,
+        .settings-panel input:focus {
+            border-color: #f5c518;
+        }
+        .settings-panel .save-settings {
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: none;
+            background: #f5c518;
+            color: #0a0e14;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        /* API key input */
         .api-key-setup {
             padding: 8px 16px;
             background: #1a212b;
@@ -1111,6 +1304,9 @@
                 height: 56px;
                 font-size: 24px;
             }
+            .auth-section .user-email {
+                max-width: 80px;
+            }
         }
     </style>
 </head>
@@ -1131,10 +1327,33 @@
                 <a href="#policy">Policy Lab</a>
                 <a href="#research">Research</a>
                 <a href="#downloads">Downloads</a>
-                <a href="#dashboard" class="btn-nav">🚀 Launch</a>
+                <div class="auth-section" id="authSection">
+                    <span class="user-email" id="userEmailDisplay"></span>
+                    <button class="auth-btn primary" id="authBtn">Sign In</button>
+                </div>
             </div>
         </div>
     </nav>
+
+    <!-- ============================================
+         AUTH MODAL
+         ============================================ -->
+    <div class="auth-modal" id="authModal">
+        <div class="content">
+            <button class="close-auth" id="closeAuth">&times;</button>
+            <h2 id="authModalTitle">Sign In</h2>
+            <form id="authForm">
+                <input type="email" id="authEmail" placeholder="Email" required />
+                <input type="password" id="authPassword" placeholder="Password" required />
+                <button type="submit" class="auth-submit" id="authSubmit">Sign In</button>
+            </form>
+            <button class="google-btn" id="googleAuthBtn">🔑 Sign in with Google</button>
+            <div class="toggle-auth">
+                <span id="authToggleText">Don't have an account?</span>
+                <a id="authToggleLink">Sign Up</a>
+            </div>
+        </div>
+    </div>
 
     <!-- ============================================
          HERO
@@ -1358,7 +1577,7 @@
     </section>
 
     <!-- ============================================
-         FOOTER (corrected)
+         FOOTER
          ============================================ -->
     <footer class="footer">
         <div class="container">
@@ -1377,7 +1596,7 @@
     </footer>
 
     <!-- ============================================ -->
-    <!-- EI ASSISTANT CHAT WIDGET (works without API) -->
+    <!-- EI ASSISTANT CHAT WIDGET                     -->
     <!-- ============================================ -->
     <button class="ei-chat-toggle" id="eiChatToggle" aria-label="Open EI Assistant">
         <span style="position:relative; top:-4px;">EI</span>
@@ -1392,18 +1611,39 @@
             </div>
             <div class="actions">
                 <button class="voice-toggle" id="voiceToggle" title="Toggle voice">🔊</button>
+                <button class="settings-toggle" id="settingsToggle" title="Settings">⚙️</button>
                 <button class="close-btn" id="eiChatClose">✕</button>
             </div>
         </div>
+        <!-- Settings panel -->
+        <div class="settings-panel" id="settingsPanel">
+            <label>Name:</label>
+            <input type="text" id="userNameInput" placeholder="Your name" />
+            <label>Tone:</label>
+            <select id="userToneSelect">
+                <option value="friendly">Friendly</option>
+                <option value="formal">Formal</option>
+                <option value="humorous">Humorous</option>
+                <option value="concise">Concise</option>
+            </select>
+            <label>Language:</label>
+            <select id="userLanguageSelect">
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="hi">Hindi</option>
+            </select>
+            <button class="save-settings" id="saveSettings">Save</button>
+        </div>
+        <!-- API key input -->
         <div class="api-key-setup">
-            <input type="text" id="apiKeyInput" placeholder="Optional: Hugging Face API key (free)" />
+            <input type="text" id="apiKeyInput" placeholder="Optional: Hugging Face API key" />
             <span class="key-status" id="apiKeyStatus">⚪ Not set</span>
         </div>
         <div class="ei-chat-messages" id="eiChatMessages">
             <div class="msg ai">
-                👋 Hello! I'm <strong>EI</strong>, your friendly assistant.<br />
-                I can answer questions using my built‑in knowledge base.<br />
-                For more advanced answers (like geopolitics or stock markets), you can optionally add a free Hugging Face API key above.<br />
+                👋 Hello! I'm <strong>EI</strong>, your personalised assistant.<br />
+                Sign in to save your preferences and conversation history.<br />
                 <div class="disclaimer">⚠️ EI may make mistakes. Verify with official sources.</div>
             </div>
         </div>
@@ -1456,11 +1696,28 @@
     </div>
 
     <!-- ============================================
-         JAVASCRIPT - DASHBOARD + DOWNLOADS + EI
+         JAVASCRIPT - FULL APPLICATION
          ============================================ -->
     <script>
         // ============================================================
-        // 1. EXISTING DASHBOARD CODE (fully restored)
+        // 🔥 YOUR FIREBASE CONFIG (inserted)
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBWZfWVpWOo7m2zGm7heGo-BhKRlq13UGo",
+            authDomain: "saransh-e-i-p-f79f9.firebaseapp.com",
+            projectId: "saransh-e-i-p-f79f9",
+            storageBucket: "saransh-e-i-p-f79f9.firebasestorage.app",
+            messagingSenderId: "719453724289",
+            appId: "1:719453724289:web:ea4a0399edb93b150e3780"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ============================================================
+        // 1. DASHBOARD CODE (unchanged)
         // ============================================================
         const histYears = Array.from({ length: 24 }, (_, i) => 2000 + i);
         const forecastYears = Array.from({ length: 5 }, (_, i) => 2024 + i);
@@ -1865,6 +2122,8 @@
                 updatePolicyImpact(currentCountry);
             });
         });
+
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1876,7 +2135,7 @@
         });
 
         // ============================================================
-        // 2. DOWNLOAD HANDLERS (fully restored)
+        // 2. DOWNLOAD HANDLERS (unchanged)
         // ============================================================
         function downloadBlob(blob, filename) {
             const url = URL.createObjectURL(blob);
@@ -2538,7 +2797,171 @@
         fullUpdate();
 
         // ============================================================
-        // 3. EI ASSISTANT – ALWAYS WORKS (API optional)
+        // 3. AUTH & FIRESTORE MANAGEMENT
+        // ============================================================
+        let currentUser = null;
+        let userData = null;
+
+        const authModal = document.getElementById('authModal');
+        const authBtn = document.getElementById('authBtn');
+        const closeAuth = document.getElementById('closeAuth');
+        const authForm = document.getElementById('authForm');
+        const authEmail = document.getElementById('authEmail');
+        const authPassword = document.getElementById('authPassword');
+        const authSubmit = document.getElementById('authSubmit');
+        const authModalTitle = document.getElementById('authModalTitle');
+        const authToggleText = document.getElementById('authToggleText');
+        const authToggleLink = document.getElementById('authToggleLink');
+        const googleAuthBtn = document.getElementById('googleAuthBtn');
+        const userEmailDisplay = document.getElementById('userEmailDisplay');
+
+        let isSignUp = false;
+
+        function updateAuthUI(user) {
+            if (user) {
+                currentUser = user;
+                userEmailDisplay.textContent = user.email || user.displayName || 'User';
+                authBtn.textContent = 'Sign Out';
+                authBtn.className = 'auth-btn';
+                loadUserData(user.uid);
+            } else {
+                currentUser = null;
+                userData = null;
+                userEmailDisplay.textContent = '';
+                authBtn.textContent = 'Sign In';
+                authBtn.className = 'auth-btn primary';
+            }
+        }
+
+        async function loadUserData(uid) {
+            try {
+                const doc = await db.collection('users').doc(uid).get();
+                if (doc.exists) {
+                    userData = doc.data();
+                    if (userData.name) {
+                        userName = userData.name;
+                        document.getElementById('userNameInput').value = userName;
+                    }
+                    if (userData.tone) {
+                        document.getElementById('userToneSelect').value = userData.tone;
+                    }
+                    if (userData.language) {
+                        document.getElementById('userLanguageSelect').value = userData.language;
+                    }
+                } else {
+                    const defaults = {
+                        name: '',
+                        tone: 'friendly',
+                        language: 'en',
+                        history: [],
+                        created: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    await db.collection('users').doc(uid).set(defaults);
+                    userData = defaults;
+                }
+            } catch (e) {
+                console.error('Error loading user data:', e);
+            }
+        }
+
+        async function saveUserPreferences() {
+            if (!currentUser) return;
+            const name = document.getElementById('userNameInput').value.trim();
+            const tone = document.getElementById('userToneSelect').value;
+            const language = document.getElementById('userLanguageSelect').value;
+            try {
+                await db.collection('users').doc(currentUser.uid).update({
+                    name: name,
+                    tone: tone,
+                    language: language,
+                    updated: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                userData = { ...userData, name, tone, language };
+                userName = name;
+                addMessage('ai', '✅ Preferences saved!');
+            } catch (e) {
+                console.error('Error saving preferences:', e);
+            }
+        }
+
+        async function saveChatMessage(userMessage, aiResponse) {
+            if (!currentUser) return;
+            try {
+                const historyRef = db.collection('users').doc(currentUser.uid);
+                const newEntry = {
+                    user: userMessage,
+                    ai: aiResponse,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                await historyRef.update({
+                    history: firebase.firestore.FieldValue.arrayUnion(newEntry)
+                });
+            } catch (e) {
+                console.error('Error saving chat history:', e);
+            }
+        }
+
+        // Auth listeners
+        auth.onAuthStateChanged(user => {
+            updateAuthUI(user);
+        });
+
+        authToggleLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            isSignUp = !isSignUp;
+            authModalTitle.textContent = isSignUp ? 'Sign Up' : 'Sign In';
+            authSubmit.textContent = isSignUp ? 'Sign Up' : 'Sign In';
+            authToggleText.textContent = isSignUp ? 'Already have an account?' : "Don't have an account?";
+            authToggleLink.textContent = isSignUp ? 'Sign In' : 'Sign Up';
+        });
+
+        authBtn.addEventListener('click', function() {
+            if (currentUser) {
+                auth.signOut();
+                return;
+            }
+            authModal.classList.add('open');
+            authEmail.value = '';
+            authPassword.value = '';
+        });
+
+        closeAuth.addEventListener('click', function() {
+            authModal.classList.remove('open');
+        });
+        window.addEventListener('click', function(e) {
+            if (e.target === authModal) authModal.classList.remove('open');
+        });
+
+        authForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = authEmail.value;
+            const password = authPassword.value;
+            try {
+                if (isSignUp) {
+                    await auth.createUserWithEmailAndPassword(email, password);
+                } else {
+                    await auth.signInWithEmailAndPassword(email, password);
+                }
+                authModal.classList.remove('open');
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        });
+
+        googleAuthBtn.addEventListener('click', async function() {
+            try {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                await auth.signInWithPopup(provider);
+                authModal.classList.remove('open');
+            } catch (err) {
+                alert('Google sign-in error: ' + err.message);
+            }
+        });
+
+        document.getElementById('saveSettings').addEventListener('click', saveUserPreferences);
+
+        // ============================================================
+        // 4. EI ASSISTANT (upgraded with personalisation)
         // ============================================================
         const toggleBtn = document.getElementById('eiChatToggle');
         const chatWindow = document.getElementById('eiChatWindow');
@@ -2568,7 +2991,7 @@
                 apiKey = key;
                 apiKeyStatus.textContent = '✅ Active';
                 apiKeyStatus.className = 'key-status active';
-                addMessage('ai', '✅ API key saved. You can now use cloud LLMs for deeper insights.');
+                addMessage('ai', '✅ API key saved. You can now use cloud LLMs.');
             } else {
                 localStorage.removeItem('hf_api_key');
                 apiKey = '';
@@ -2606,47 +3029,24 @@
             }
         }
 
-        // ----- Cloud API (optional) -----
-        async function callHuggingFace(prompt, context = '') {
-            if (!apiKey) throw new Error('No API key.');
-            const model = 'mistralai/Mistral-7B-Instruct-v0.1';
-            const url = `https://api-inference.huggingface.co/models/${model}`;
-            const systemMsg =
-                "You are EI, an economic intelligence assistant. You are knowledgeable about economics, geopolitics, stock markets, and general knowledge. Answer concisely and accurately. If asked about stock predictions, give a balanced view with caveats. Always maintain a friendly tone.";
-            const userMsg = `Context: ${context || 'No additional context.'}\n\nUser: ${prompt}\n\nAssistant:`;
-            const payload = {
-                inputs: `${systemMsg}\n\n${userMsg}`,
-                parameters: { max_new_tokens: 512, temperature: 0.7, top_p: 0.9, return_full_text: false }
-            };
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`API error (${response.status}): ${errorText}`);
-            }
-            const result = await response.json();
-            if (result && result[0] && result[0].generated_text) {
-                return result[0].generated_text.trim();
-            } else {
-                throw new Error('Unexpected response');
-            }
-        }
-
-        // ----- Built‑in knowledge base (always available) -----
+        // --- Built‑in knowledge base ---
         function getFallbackResponse(question) {
             const q = question.toLowerCase().trim();
+
+            // Check for name introduction (fix for "I'm xyz")
+            const nameMatch = q.match(/(?:my name is|i am|i'm|im|call me)\s+([a-zA-Z]+)/i);
+            if (nameMatch) {
+                userName = nameMatch[1];
+                if (currentUser) {
+                    db.collection('users').doc(currentUser.uid).update({ name: userName }).catch(() => {});
+                }
+                return `Nice to meet you, ${userName}! 😊 I'll remember that.`;
+            }
 
             if (q.match(/^(hi|hello|hey|howdy|greetings)/i)) {
                 const namePart = userName ? `, ${userName}` : '';
                 const g = ['Hey' + namePart + '! 👋 How can I help?', 'Hello' + namePart + '! 😊 What\'s on your mind?'];
                 return g[Math.floor(Math.random() * g.length)];
-            }
-            if (q.match(/^(i am|i'm|my name is|call me)\s+(\w+)/i)) {
-                const match = q.match(/^(i am|i'm|my name is|call me)\s+(\w+)/i);
-                if (match) { userName = match[2]; return `Nice to meet you, ${userName}! 😊`; }
             }
 
             const kb = {
@@ -2678,8 +3078,46 @@
             return "That's an interesting question! I'm here to help. Could you tell me more? I'm best with economics, geopolitics, and stock markets. 😊";
         }
 
-        // ----- Main answer function -----
+        // --- Cloud API (if API key provided) ---
+        async function callHuggingFace(prompt, context = '') {
+            if (!apiKey) throw new Error('No API key.');
+            const model = 'mistralai/Mistral-7B-Instruct-v0.1';
+            const url = `https://api-inference.huggingface.co/models/${model}`;
+
+            let tone = 'friendly';
+            let lang = 'en';
+            if (currentUser && userData) {
+                tone = userData.tone || 'friendly';
+                lang = userData.language || 'en';
+            }
+
+            const systemMsg =
+                `You are EI, an economic intelligence assistant. You are knowledgeable about economics, geopolitics, stock markets, and general knowledge. Answer concisely and accurately. If asked about stock predictions, give a balanced view with caveats. Always maintain a ${tone} tone. Respond in ${lang} language.`;
+            const userMsg = `Context: ${context || 'No additional context.'}\n\nUser: ${prompt}\n\nAssistant:`;
+            const payload = {
+                inputs: `${systemMsg}\n\n${userMsg}`,
+                parameters: { max_new_tokens: 512, temperature: 0.7, top_p: 0.9, return_full_text: false }
+            };
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`API error (${response.status}): ${errorText}`);
+            }
+            const result = await response.json();
+            if (result && result[0] && result[0].generated_text) {
+                return result[0].generated_text.trim();
+            } else {
+                throw new Error('Unexpected response');
+            }
+        }
+
+        // --- Main answer function ---
         async function getAIResponse(userText, context = '') {
+            // First try cloud if API key is available
             if (apiKey) {
                 try {
                     return await callHuggingFace(userText, context);
@@ -2692,7 +3130,7 @@
             }
         }
 
-        // ----- Send handler -----
+        // --- Send handler (saves history) ---
         async function handleSend() {
             const text = inputField.value.trim();
             if (!text) return;
@@ -2711,9 +3149,14 @@
             const reply = await getAIResponse(text, context);
             typingMsg.remove();
             addMessage('ai', reply);
+
+            // Save to Firestore if logged in
+            if (currentUser) {
+                saveChatMessage(text, reply);
+            }
         }
 
-        // ----- File upload -----
+        // --- File upload ---
         fileInput.addEventListener('change', async function(e) {
             const files = e.target.files;
             if (!files.length) return;
@@ -2730,65 +3173,4 @@
                     let fullText = '';
                     for (let i = 1; i <= pdf.numPages; i++) {
                         const page = await pdf.getPage(i);
-                        const textContent = await page.getTextContent();
-                        fullText += textContent.items.map(item => item.str).join(' ') + '\n';
-                    }
-                    extractedText = fullText;
-                } else if (file.type.startsWith('image/')) {
-                    const imageUrl = URL.createObjectURL(file);
-                    const result = await Tesseract.recognize(imageUrl, 'eng');
-                    extractedText = result.data.text;
-                    URL.revokeObjectURL(imageUrl);
-                } else if (file.type === 'text/plain' || file.name.endsWith('.txt') || file.name.endsWith('.csv')) {
-                    extractedText = await file.text();
-                } else if (file.name.endsWith('.docx')) {
-                    extractedText = await file.text();
-                } else {
-                    addMessage('ai', `⚠️ File type "${file.type}" not fully supported. I'll try to read as text.`);
-                    extractedText = await file.text();
-                }
-                if (extractedText.trim().length > 0) {
-                    window._uploadedContext = extractedText;
-                    const preview = extractedText.length > 300 ? extractedText.substring(0, 300) + '…' : extractedText;
-                    addMessage('ai', `📄 File "${fileName}" uploaded and parsed. Context set.\n\nPreview:\n${preview}`);
-                } else {
-                    addMessage('ai', `❌ Could not extract text from "${fileName}".`);
-                }
-            } catch (err) {
-                addMessage('ai', `❌ Error processing file: ${err.message}`);
-            }
-            fileInput.value = '';
-        });
-
-        // ----- UI toggles -----
-        toggleBtn.addEventListener('click', function() {
-            chatWindow.classList.toggle('open');
-            if (chatWindow.classList.contains('open')) inputField.focus();
-        });
-
-        closeBtn.addEventListener('click', function() { chatWindow.classList.remove('open'); });
-        sendBtn.addEventListener('click', handleSend);
-        inputField.addEventListener('keypress', function(e) { if (e.key === 'Enter') { e.preventDefault();
-                handleSend(); } });
-        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') chatWindow.classList.remove('open'); });
-
-        // ----- Legal modals -----
-        const privacyModal = document.getElementById('privacyModal');
-        const disclaimerModal = document.getElementById('disclaimerModal');
-        document.getElementById('privacyLink').addEventListener('click', function(e) { e.preventDefault();
-            privacyModal.classList.add('open'); });
-        document.getElementById('disclaimerLink').addEventListener('click', function(e) { e.preventDefault();
-            disclaimerModal.classList.add('open'); });
-        document.getElementById('closePrivacy').addEventListener('click', function() { privacyModal.classList.remove(
-            'open'); });
-        document.getElementById('closeDisclaimer').addEventListener('click', function() { disclaimerModal.classList.remove(
-                'open'); });
-        window.addEventListener('click', function(e) { if (e.target === privacyModal) privacyModal.classList.remove('open');
-            if (e.target === disclaimerModal) disclaimerModal.classList.remove('open'); });
-
-        console.log('✅ Complete platform restored – EI assistant works out of the box.');
-        console.log('👤 Footer corrected: Built By Saransh Shree Chitransh · Saransh\'s MIT Portfolio · EIP');
-    </script>
-
-</body>
-</html>
+                        const textContent = await page.getTextContent
