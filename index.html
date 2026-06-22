@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🧠 Economic Intelligence Platform</title>
 
-    <!-- Plotly -->
+    <!-- Plotly CDN -->
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js">
     </script>
     <!-- PptxGenJS -->
@@ -56,6 +56,7 @@
             margin: 0 auto;
             padding: 0 24px;
         }
+        /* ----- NAVBAR ----- */
         .navbar {
             position: fixed;
             top: 0;
@@ -156,6 +157,7 @@
         .auth-btn.primary:hover {
             background: #ffd700;
         }
+        /* ----- AUTH MODAL ----- */
         .auth-modal {
             display: none;
             position: fixed;
@@ -257,6 +259,7 @@
         .auth-modal .content .close-auth:hover {
             color: #f5c518;
         }
+        /* ----- HERO ----- */
         .hero {
             position: relative;
             min-height: 80vh;
@@ -374,6 +377,7 @@
             transform: scale(1.04);
             box-shadow: 0 8px 32px rgba(245, 197, 24, 0.35);
         }
+        /* ----- DASHBOARD ----- */
         .dashboard-section {
             padding: 30px 0 60px;
             background: #0a0e14;
@@ -489,6 +493,7 @@
             width: 100%;
             height: 280px;
         }
+        /* ----- PREDICTIONS ----- */
         .prediction-section {
             padding: 40px 0 60px;
             background: #0f141c;
@@ -552,6 +557,7 @@
         .prediction-card .accuracy .metric strong {
             color: #f5c518;
         }
+        /* ----- POLICY ----- */
         .policy-section {
             padding: 40px 0 60px;
             background: #0a0e14;
@@ -640,6 +646,7 @@
         .impact-item .value.neutral {
             color: #f5c518;
         }
+        /* ----- RESEARCH ----- */
         .research-section {
             padding: 40px 0 60px;
             background: #0f141c;
@@ -688,6 +695,7 @@
         .research-paper .section ul li {
             list-style: disc;
         }
+        /* ----- DOWNLOADS ----- */
         .download-section {
             padding: 60px 0;
             background: #0a0e14;
@@ -753,6 +761,7 @@
             background: #ffd700;
             transform: scale(1.04);
         }
+        /* ----- FOOTER ----- */
         .footer {
             background: #06090d;
             padding: 32px 0;
@@ -860,7 +869,7 @@
             }
         }
 
-        /* EI Assistant */
+        /* ----- EI Assistant ----- */
         .ei-chat-toggle {
             position: fixed;
             bottom: 28px;
@@ -1364,7 +1373,7 @@
             </div>
 
             <div class="charts-grid" id="chartsGrid">
-                <!-- Charts rendered by JS -->
+                <!-- Charts rendered by JavaScript -->
             </div>
         </div>
     </section>
@@ -1537,7 +1546,7 @@
          ============================================ -->
     <script>
         // ============================================================
-        // 🔥 YOUR FIREBASE CONFIG
+        // 🔥 YOUR FIREBASE CONFIG (already inserted)
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyBWZfWVpWOo7m2zGm7heGo-BhKRlq13UGo",
