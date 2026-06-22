@@ -22,7 +22,7 @@
 
     <style>
         /* ============================================
-           RESET & BASE (completely restored)
+           RESET & BASE (fully restored)
            ============================================ */
         * {
             margin: 0;
@@ -640,7 +640,7 @@
         }
 
         /* ============================================
-           FOOTER (corrected)
+           FOOTER (corrected grammar)
            ============================================ */
         .footer {
             background: #06090d;
@@ -1377,7 +1377,7 @@
     </footer>
 
     <!-- ============================================ -->
-    <!-- EI ASSISTANT CHAT WIDGET                     -->
+    <!-- EI ASSISTANT CHAT WIDGET (works without API) -->
     <!-- ============================================ -->
     <button class="ei-chat-toggle" id="eiChatToggle" aria-label="Open EI Assistant">
         <span style="position:relative; top:-4px;">EI</span>
@@ -1396,14 +1396,14 @@
             </div>
         </div>
         <div class="api-key-setup">
-            <input type="text" id="apiKeyInput" placeholder="Hugging Face API key (free from huggingface.co)" />
+            <input type="text" id="apiKeyInput" placeholder="Optional: Hugging Face API key (free)" />
             <span class="key-status" id="apiKeyStatus">⚪ Not set</span>
         </div>
         <div class="ei-chat-messages" id="eiChatMessages">
             <div class="msg ai">
-                👋 Hello! I'm <strong>EI</strong>, powered by cloud LLMs.<br />
-                Enter your Hugging Face API key above (free) to unlock full intelligence.<br />
-                Ask me about economics, geopolitics, stock markets, or anything else.
+                👋 Hello! I'm <strong>EI</strong>, your friendly assistant.<br />
+                I can answer questions using my built‑in knowledge base.<br />
+                For more advanced answers (like geopolitics or stock markets), you can optionally add a free Hugging Face API key above.<br />
                 <div class="disclaimer">⚠️ EI may make mistakes. Verify with official sources.</div>
             </div>
         </div>
@@ -1456,7 +1456,7 @@
     </div>
 
     <!-- ============================================
-         JAVASCRIPT - DASHBOARD + DOWNLOADS + CLOUD CHAT
+         JAVASCRIPT - DASHBOARD + DOWNLOADS + EI
          ============================================ -->
     <script>
         // ============================================================
@@ -2538,7 +2538,7 @@
         fullUpdate();
 
         // ============================================================
-        // 3. EI ASSISTANT WITH CLOUD LLM (Hugging Face)
+        // 3. EI ASSISTANT – ALWAYS WORKS (API optional)
         // ============================================================
         const toggleBtn = document.getElementById('eiChatToggle');
         const chatWindow = document.getElementById('eiChatWindow');
@@ -2554,7 +2554,7 @@
         let apiKey = localStorage.getItem('hf_api_key') || '';
         apiKeyInput.value = apiKey;
         if (apiKey) {
-            apiKeyStatus.textContent = '✅ Key set';
+            apiKeyStatus.textContent = '✅ Active';
             apiKeyStatus.className = 'key-status active';
         }
 
@@ -2566,14 +2566,15 @@
             if (key) {
                 localStorage.setItem('hf_api_key', key);
                 apiKey = key;
-                apiKeyStatus.textContent = '✅ Key set';
+                apiKeyStatus.textContent = '✅ Active';
                 apiKeyStatus.className = 'key-status active';
-                addMessage('ai', '✅ API key saved. You can now use cloud LLMs.');
+                addMessage('ai', '✅ API key saved. You can now use cloud LLMs for deeper insights.');
             } else {
                 localStorage.removeItem('hf_api_key');
                 apiKey = '';
                 apiKeyStatus.textContent = '⚪ Not set';
                 apiKeyStatus.className = 'key-status';
+                addMessage('ai', '⚪ API key removed. Using built‑in knowledge base.');
             }
         });
 
@@ -2605,8 +2606,9 @@
             }
         }
 
+        // ----- Cloud API (optional) -----
         async function callHuggingFace(prompt, context = '') {
-            if (!apiKey) throw new Error('No API key provided.');
+            if (!apiKey) throw new Error('No API key.');
             const model = 'mistralai/Mistral-7B-Instruct-v0.1';
             const url = `https://api-inference.huggingface.co/models/${model}`;
             const systemMsg =
@@ -2629,12 +2631,14 @@
             if (result && result[0] && result[0].generated_text) {
                 return result[0].generated_text.trim();
             } else {
-                throw new Error('Unexpected response format');
+                throw new Error('Unexpected response');
             }
         }
 
+        // ----- Built‑in knowledge base (always available) -----
         function getFallbackResponse(question) {
             const q = question.toLowerCase().trim();
+
             if (q.match(/^(hi|hello|hey|howdy|greetings)/i)) {
                 const namePart = userName ? `, ${userName}` : '';
                 const g = ['Hey' + namePart + '! 👋 How can I help?', 'Hello' + namePart + '! 😊 What\'s on your mind?'];
@@ -2644,6 +2648,7 @@
                 const match = q.match(/^(i am|i'm|my name is|call me)\s+(\w+)/i);
                 if (match) { userName = match[2]; return `Nice to meet you, ${userName}! 😊`; }
             }
+
             const kb = {
                 'gdp': 'GDP (Gross Domestic Product) measures the total value of goods and services. It’s a key indicator of economic health.',
                 'inflation': 'Inflation is the rate at which prices rise. Moderate inflation (2-3%) is healthy.',
@@ -2673,12 +2678,13 @@
             return "That's an interesting question! I'm here to help. Could you tell me more? I'm best with economics, geopolitics, and stock markets. 😊";
         }
 
+        // ----- Main answer function -----
         async function getAIResponse(userText, context = '') {
             if (apiKey) {
                 try {
                     return await callHuggingFace(userText, context);
                 } catch (e) {
-                    console.error('API error:', e);
+                    console.warn('Cloud API failed, using fallback:', e.message);
                     return getFallbackResponse(userText);
                 }
             } else {
@@ -2686,6 +2692,7 @@
             }
         }
 
+        // ----- Send handler -----
         async function handleSend() {
             const text = inputField.value.trim();
             if (!text) return;
@@ -2706,6 +2713,7 @@
             addMessage('ai', reply);
         }
 
+        // ----- File upload -----
         fileInput.addEventListener('change', async function(e) {
             const files = e.target.files;
             if (!files.length) return;
@@ -2752,6 +2760,7 @@
             fileInput.value = '';
         });
 
+        // ----- UI toggles -----
         toggleBtn.addEventListener('click', function() {
             chatWindow.classList.toggle('open');
             if (chatWindow.classList.contains('open')) inputField.focus();
@@ -2763,7 +2772,7 @@
                 handleSend(); } });
         document.addEventListener('keydown', function(e) { if (e.key === 'Escape') chatWindow.classList.remove('open'); });
 
-        // Legal modals
+        // ----- Legal modals -----
         const privacyModal = document.getElementById('privacyModal');
         const disclaimerModal = document.getElementById('disclaimerModal');
         document.getElementById('privacyLink').addEventListener('click', function(e) { e.preventDefault();
@@ -2777,7 +2786,7 @@
         window.addEventListener('click', function(e) { if (e.target === privacyModal) privacyModal.classList.remove('open');
             if (e.target === disclaimerModal) disclaimerModal.classList.remove('open'); });
 
-        console.log('✅ Full interface restored. EI assistant uses cloud LLM (Hugging Face) with fallback.');
+        console.log('✅ Complete platform restored – EI assistant works out of the box.');
         console.log('👤 Footer corrected: Built By Saransh Shree Chitransh · Saransh\'s MIT Portfolio · EIP');
     </script>
 
